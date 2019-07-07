@@ -1,0 +1,23 @@
+{% extends 'stationery/stat_base.html' %}
+
+{% block content %}
+
+<p> upload image </p>
+
+<table class="table table-striped table-bordered">
+ <tbody>
+<form method="post" action="upload_img" enctype="multipart/form-data">
+    {%  csrf_token  %}
+           <tr>
+             <td>Upload image</td>
+               <td><input type="file" name="stat_img"></td>
+               <td><input type="submit" value="上传"></td>
+
+
+           </tr>
+</form>
+</tbody>
+</table>
+
+{% endblock %}
+

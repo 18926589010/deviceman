@@ -1,0 +1,105 @@
+<!-- extends 'headbase.html'   -->
+
+{% extends 'starter.html' %}
+
+{% block header %}
+
+      <h1>
+        用户管理
+        <small>设备信息</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/deviceman/totalchart"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">用户管理</li>
+      </ol>
+
+{% endblock %}
+
+
+{% block content %}
+<body>
+
+
+
+  <div  class="row">
+    <div class="col-sm-12 box">
+<p>
+
+    <form action="/deviceman/useredit/{{ id }}/" method="POST" novalidate="novalidate">
+        {% csrf_token %}
+
+      <table  class="table table-striped table-bordered  table-hover" >
+<thead>
+           <tr>
+               <th align="center">Field</th>
+               <th>Values</th>
+
+           </tr>
+ </thead>
+ <tbody>
+
+           <tr>
+               <td > User Name（AD帐号）: </td>
+               <td >{{ obj.user_name }}{{ obj.user_name.errors }}</td>
+            </tr>
+
+
+           <tr>
+               <td > Full Name(全名):  </td>
+               <td >{{ obj.full_name }}{{ obj.full_name.errors }}</td>
+            </tr>
+
+
+           <tr>
+               <td > Email Address（邮件地址）:  </td>
+               <td >  {{ obj.email_address }}{{ obj.email_address.errors }}             </td>
+            </tr>
+
+            <tr>
+               <td >Department（部门）:  </td>
+               <td >{{ obj.dept_list }}{{ obj.dept_list.errors }}</td>
+            </tr>
+
+             <tr>
+               <td >Resign Date(离职日期）:  </td>
+               <td >{{ obj.resigndate }}格式：2001-01-01{{ obj.resigndate.errors }}</td>
+            </tr>
+
+              <tr>
+               <td >Last Update（最近更新）:  </td>
+               <td >{{ obj.lastupdate }}*最后一次更新日期{{ obj.lastupdate.errors }}</td>
+            </tr>
+           <tr >
+                <td >User Status（状态）:  </td>
+               <td >{{ obj.user_status }}</td>
+            </tr>
+           <tr >
+                <td >Remark（备注）:  </td>
+               <td >{{ obj.remark }}</td>
+            </tr>
+
+</tbody>
+</table>
+
+
+
+
+  <!--      {{ obj.as_table }} -->
+
+        <input type="submit" value="提交">
+    </form>
+       {{ status  }}
+
+        </p>
+
+
+
+
+    </div>
+
+</body>
+
+
+
+
+{% endblock %}

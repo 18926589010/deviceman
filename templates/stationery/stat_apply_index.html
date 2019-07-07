@@ -1,0 +1,195 @@
+{% extends 'stationery/stat_apply_base.html' %}
+{% block content %}
+{% load staticfiles %}
+
+<div  class="row">
+    <div class="col-sm-8">
+
+        {% for stat_type in stat_types %}
+        --<a href="stat_apply_index1?id={{ stat_type.id }}"   >{{ stat_type.name  }}</a>
+        {%  endfor %}
+--<a href="stat_apply_index1"   >常用文具</a>
+        <form method="post" action="stat_apply_index1">
+            {% csrf_token %}
+            文具搜索：<input type="text" id="stationery_name" name="stationery_name"> <button type="submit" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-question-sign"></span> 搜索
+        </button>
+        </form>
+<table class="table table-striped table-bordered">
+<thead>
+           <tr>
+             <th>编号</th>
+             <th>文具名称</th>
+              <th>规格</th>
+<th>操作</th>
+
+           </tr>
+ </thead>
+ <tbody>
+           {% for stationery in stationerys %}
+           <tr nid="{{ stationery.id }}">
+             <td>{{ forloop.counter }}<img src="{% static '/media/' %}{{ stationery.stat_img}}" alt="picture" height="120" width="180">{{ stationery.name }}<br> <br>库存数量:{{ stationery.stock_num }}</td>
+
+               <td>{{ stationery.spec }}</td>
+<td>
+
+
+    <a onclick="testajax(this);" href="#" >放入购物车</a>
+           </td>
+           </tr>
+            {% endfor %}
+</tbody>
+</table>
+<!--   以下是显示分页码           -->
+<ul class="pagination" id="pager">
+        {#上一页按钮开始#}
+        {# 如果当前页有上一页#}
+        {% if users.has_previous %}
+            {#  当前页的上一页按钮正常使用#}
+          {#  <li class="previous"><a href="stat_apply_index?page={{ stationerys.previous_page_number }}">上一页</a></li> #}
+            <a href="stat_apply_index?page={{ stationerys.previous_page_number }}">上一页</a>
+        {% else %}
+            {# 当前页的不存在上一页时,上一页的按钮不可用#}
+            {# <li class="previous disabled"><a href="#">上一页</a></li> #}
+            <a href="#">上一页</a>
+        {% endif %}
+        {#上一页按钮结束#}
+        {# 页码开始#}
+        {% for num in paginator.page_range %}
+
+            {% if num == currentPage %}
+            {#  <li class="item active"><a href="stat_apply_index1?page={{ num }}">{{ num }}</a></li> #}
+             <a href="stat_apply_index1?page={{ num }}">{{ num }}</a>
+            {% else %}
+             {#   <li class="item"><a href="stat_apply_index1?page={{ num }}">{{ num }}</a></li> #}
+            <a href="stat_apply_index1?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {#页码结束#}
+        {# 下一页按钮开始#}
+        {% if stationerys.has_next %}
+            <li class="next"><a href="stat_apply_index1?page={{ stationerys.next_page_number }}">下一页</a></li>
+        {% else %}
+            <li class="next disabled"><a href="#">下一页</a></li>
+        {% endif %}
+        {# 下一页按钮结束#}
+    </ul>
+<!--- 以上是实现分页码 -->
+
+    </div>
+
+
+    <div class="col-sm-4 cart"  id="cartlist">
+<h4 >购物车<span class="glyphicon glyphicon-shopping-cart"></span> 订单号：{{ request.session.orderid }} </h4>
+<table class="table table-striped table-bordered" id="t2">
+<thead>
+           <tr>
+             <th>序号</th>
+             <th>文具名称</th>
+              <th>数量</th>
+
+
+           </tr>
+ </thead>
+ <tbody >
+           {% for cart in carts %}
+           <tr>
+             <td>{{ forloop.counter }}</td>
+               <td>{{ cart.stationery }}</a></td>
+               <td> -{{ cart.order_num }}+</td>
+
+
+           </tr>
+            {% endfor %}
+</tbody>
+</table>
+      <div align="left" >
+<ul>
+          <a href="clean_cart" >
+              <span class="glyphicon glyphicon-question-sign"></span> 清空</a>
+--
+           <a href="submit_cart">
+          <span class="glyphicon glyphicon-question-sign"></span> 提交</a>
+</ul>
+
+</div>
+        </div>
+
+
+
+ </div>
+
+<script language="JavaScript">
+
+function add_cart(ths) {
+       var id=$(ths).parent().parent().attr('nid');
+       var orderid="{{ request.session.orderid  }}";
+        $('table tbody#cart').html('');
+
+        $.ajax({
+            url:'ajax',
+            type:'GET',
+            data:{id:id, orderid:orderid},
+            datatype:'json',
+            success:function (ret) {
+
+                // 回调函数 msg是服务器返回的字符串
+                console.log(ret);
+
+
+            }
+
+        })
+
+    }
+
+
+
+
+function testajax(ths){
+
+    var id=$(ths).parent().parent().attr('nid');
+    var orderid="{{ request.session.orderid  }}";
+
+    //给传递的data加一个时间变量，时间由下面的var times获得，以解决在IE中工作不正常的问题
+    var times=new Date().getTime();
+    $.ajax({
+    type: 'GET',
+    url: 'ajax',
+    dataType: 'json',
+    data:{id:id,orderid:orderid,times:times},
+    success: function(ret){
+    //查询成功之后填充表格
+    var html = "";
+    var tdHead = "<td height='20'><div align='center'><span class='STYLE1'>";
+    var tdFoot = "</span></div></td>";
+    $("#t2 tr:gt(0)").remove();
+    //第一行是table的表格头不需清除。
+    for(var i=0;i<ret.length;i++){
+    var countInfo = ret[i];
+    var totalCount = countInfo.stationery__name;
+
+    var sucCount = "-"+countInfo.order_num+"+";
+
+    html += "<tr>" + tdHead + (i + 1) + tdFoot +
+    tdHead + totalCount + tdFoot +
+    tdHead + sucCount + tdFoot + "</tr>";
+}
+$("#t2").append(html);
+//将新数据填充到table
+}
+});
+}
+
+
+
+
+
+
+</script>
+
+
+
+
+{% endblock %}
+

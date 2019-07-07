@@ -1,0 +1,158 @@
+<!-- extends 'headbase.html'   -->
+
+{% extends 'starter.html' %}
+
+{% block header %}
+
+      <h1>
+        图表
+        <small>设备概况</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="./totalchart"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">设备概况</li>
+      </ol>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Equipment management</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    {% for jsfile_name in script_list %}
+
+        <script src="{{ host }}/{{ jsfile_name }}.js"></script>
+
+    {% endfor %}
+
+</head>
+
+
+<p></p>
+
+     <!-- Info boxes -->
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-television"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Workstation</span>
+              <span class="info-box-number">{{ device_total.0.workstation_total  }}<small></small></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Laptop</span>
+              <span class="info-box-number">{{  device_total.1.laptop_total   }}</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-desktop"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Desktop</span>
+              <span class="info-box-number">{{  device_total.2.desktop_total }}</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Users</span>
+              <span class="info-box-number">2,000</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+
+<div  class="row box" >
+
+
+<div data-width="100%">
+    <br>
+</div>
+
+	<div class="row clearfix box-success with-border">
+		<div class="col-md-6 column">{{ wmyechart|safe }}
+		</div>
+		<div class="col-md-6 column">{{ pmyechart|safe }}
+		</div>
+	</div>
+
+
+
+
+	<div class="row clearfix">
+		<div class="col-md-4 column">{{ myechart|safe }}
+		</div>
+		<div class="col-md-4 column">{{ lmyechart|safe }}
+		</div>
+		<div class="col-md-4 column">{{ dmyechart|safe }}
+		</div>
+	</div>
+
+
+	<div class="row clearfix">
+		<div class="col-md-4 column">{{ smyechart|safe }}
+		</div>
+		<div class="col-md-4 column">{{ swmyechart|safe }}
+		</div>
+		<div class="col-md-4 column">{{ rmyechart|safe }}
+		</div>
+	</div>
+
+
+
+    <div class="row clearfix">
+        <div class="col-md-12 column">{{ monthechart|safe }} </div>
+
+    </div>
+
+    <div class="row clearfix">
+        <div class="col-md-12 column">{{ yearechart|safe }}  </div>
+    </div>
+
+   </div>
+
+
+
+
+{%  endblock %}

@@ -1,0 +1,58 @@
+{% extends 'headbase.html' %}
+{%  block content   %}
+
+{% load table_tags %}
+ <a href="#"   class="list-group-item active" >
+     当前模块：设备管理-维修记录
+ </a>
+  <div  class="row">
+      <div class="col-sm-12">
+<p>
+
+
+
+{% load django_tables2 %}
+{% render_table table %}
+  <div  class="table-responsive">
+         </div>
+          </p>
+      </div>
+  </div>
+
+
+
+
+
+
+
+
+
+<script>
+$('#user_list').select2({
+    minimumInputLength: 3,
+    ajax:
+        {
+            url: "/deviceman/ajax_get_user_list",
+            dataType: 'json',
+            type: 'GET',
+            delay: 250,
+            data: function (params) {
+            return {
+            search: params.term,
+                    }
+                                    },
+
+            processResults: function (data) {
+            return {
+            results: data
+                    };
+                                            },
+
+            cache: true
+        },
+
+});
+
+</script>
+
+{% endblock %}

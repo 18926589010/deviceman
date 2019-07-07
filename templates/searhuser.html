@@ -1,0 +1,65 @@
+
+{% include "headbase.html" %}
+<html lang="en">
+<head>
+  <title>AECOM IT Device Manager Tools</title>
+</head>
+<body>
+
+
+
+  <div class="row">
+    <div class="col-sm-4">
+
+        <div class="container">
+      <p> <form id="form3" name="form3" method="post" action="display_pc">
+        <label> 用户姓名/邮件地址/AD账号：</label> <input type="text" id="userid" name="userid" />
+         <input type="submit"  value="提交" onclick="search_confirm()"/>
+        </form></p>
+      <div class="table-responsive">
+       <table class="table table-striped table-bordered">
+         <thead>
+           <tr>
+             <th>#</th>
+             <th>AD Logon</th>
+             <th>User Full Name</th>
+               <th>Email Address</th>
+               <th>Status</th>
+               <th>Seat No</th>
+               <th>Operation</th>
+           </tr>
+         </thead>
+         <tbody>
+           {% for pc_list in pcs %}
+           <tr>
+             <td>{{pc_list.id}}</td>
+             <td>{{ pc_list.host_name }}</td>
+             <td>{{ pc_list.service_tag }}</td>
+               <td>{{ pc_list.user_list.full_name}}</td>
+               <td>{{ pc_list.host_status}}</td>
+               <td>{{ pc_list.seat_no}}</td>
+               <td>
+                   {% ifequal pc_list.host_status|upper 'IN USE'%}
+
+                   <input type="submit" value="用户离职" onclick="resign_confirm('{{pc_list.id}}','{{pc_list.host_name}}')" />
+
+                   <input type="submit" value="回收设备" onclick="collect_confirm('{{pc_list.id}}','{{pc_list.host_name}}')" />
+                   {% endifequal %}
+                   {% ifequal pc_list.host_status|upper 'INVENTORY' %}
+                   <input type="submit"  value="发放设备" onclick="" />
+                   <input type="submit"  value="申请报废" onclick="dispose_confirm('{{pc_list.id}}','{{pc_list.host_name}}')" />
+                   {% endifequal %}
+</td>           </tr>
+            {% endfor %}
+            </tbody>
+       </table>
+      </div>
+
+    </div>
+
+</div>
+ </div>
+
+
+</body>
+</html>

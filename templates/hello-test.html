@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>AECOM IT Device Manager Tools</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <div class="jumbotron">
+    <h2>AECOM 罗湖办公室设备管理系统</h2>
+    <p>紧跟潮流，追逐梦想！</p>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+          <p>
+        <div class="container">
+      <p> <form id="form3" name="form3" method="post" action="display_pc">
+        <label> 计算机编号：</label> <input type="text" value="{{id}}" name="pcid" />
+         <input type="submit"  value="提交" />
+        </form></p>
+      <div class="table-responsive">
+       <table class="table table-striped table-bordered">
+         <thead>
+           <tr>
+             <th>#</th>
+             <th>Computer Name</th>
+             <th>Service Tag</th>
+               <th>User Name</th>
+               <th>Operation</th>
+           </tr>
+         </thead>
+         <tbody>
+           {% for pc_list in pcs %}
+           <tr>
+             <td>{{pc_list.id}}</td>
+             <td>{{ pc_list.host_name }}</td>
+             <td>{{ pc_list.service_tag }}</td>
+               <td>{{ pc_list.user_list.full_name}}</td>
+               <td><input type="submit"  value="回收" onclick="window.open('collect_pc?id={{pc_list.id}}')" /> </td>
+           </tr>
+            {% endfor %}
+            </tbody>
+       </table>
+      </div>
+
+
+
+
+
+
+      <p>再牛逼的梦想,也抵不住你傻逼似的坚持！</p>
+    </div>
+
+
+  </div>
+</div>
+
+
+{{ hello|upper }}
+<hr>
+today is {{ t_date}}
+</hr>
+{% if t_count1 != '1' %}
+    <br>
+T_COUNT1={{ t_count1 }}
+    </br>
+    <br>
+    T_COUNT2={{ t_count2 }}
+    </br>
+{% endif %}
+{{ i }} {{ id }}
+<br>
+<form id="form2" name="form2" method="post" action="get_user">
+        <label> 部门名称：</label> <input type="text" name="id" />
+          <input type="submit"  value="提交" />
+
+      </form>
+<br>
+
+
+
+
+{% for user_list in users %}
+    <br>
+[ {{user_list.id}}:--
+{{ user_list.full_name }}--{{ user_list.email_address }}
+   --{{ user_list.dept_list.dept_name}} ] <input type="submit"  value="回收" onclick="window.open('display_user?id={{user_list.id}}')" /> </br>------------------
+{% endfor %}
+
+
+
+
+</body>
+</html>

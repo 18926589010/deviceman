@@ -1,0 +1,108 @@
+{% extends 'headbase.html'  %}
+
+
+
+{% block content %}
+<html lang="en">
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/static/jquery-3.3.1.js"></script>
+
+<!--第一步：引入Javascript / CSS （CDN）-->
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+
+<!-- jQuery -->
+<!--<script type="text/javascript" charset="utf8" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>  -->
+
+<!-- DataTables -->
+<script type="text/javascript" charset="utf8" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+
+
+
+    <script type="text/javascript">
+
+function resign_confirm(var1,var2){
+
+var result = confirm('清除计算机'+var2+'的用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+   <!--  alert('确定清除！');  -->
+
+    window.navigate('update_pc?id='+var1);
+  }else{
+    alert('不清除！');
+    }
+}
+
+function collect_confirm(var1,var2){
+
+var result = confirm('回收计算机'+var2+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定回收！');
+    window.navigate('update_pc?id='+var1+'&action=collect');
+  }else{
+    alert('不回收！');
+    }
+}
+
+function dispose_confirm(var1,var2){
+
+var result = confirm('申请报废计算机'+var2+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定申请报废！');
+    window.navigate('update_pc?id='+var1+'&action=dispose');
+  }else{
+    alert('不申请！');
+    }
+}
+
+
+
+</script>
+</head>
+<body>
+
+
+    <a href="#"   class="list-group-item active" >
+  当前模块：设备管理->Borrow设备
+    </a>
+  <div  class="row">
+    <div class="col-sm-12">
+<p>
+
+</p>
+ {% load table_tags %}
+{% render_table pc_lists %}
+
+
+  </div>
+</div>
+
+
+
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %}
+
+    class="{{ message.tags }}"{% endif %}><font color="red"> {{ message }}</font></li>
+
+     <script>
+    alert('{{ message }}');
+        </script>
+
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+
+
+
+
+</body>
+</html>
+
+{% endblock %}

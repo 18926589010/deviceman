@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head>
+  <title>AECOM IT Device Manager Tools</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="/static/jquery-3.3.1.js"></script>
+  <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+
+window.onload = function(){
+
+    //获得SVG文档的DOM结构
+
+        var svgdoc = document.getElementById("svgfile").getSVGDocument();
+        var att=svgdoc.getElementById({{ seatno|safe  }});
+
+        att.setAttribute("fill","blue");
+        x=att.x.animVal.value;
+        y=att.y.animVal.value;
+
+        var c = document.createElementNS( "http://www.w3.org/2000/svg", "circle" );
+        c.setAttribute( "cx", x+5 );
+        c.setAttribute( "cy", y+5 );
+        c.setAttribute( "fill", "none" );
+        c.setAttribute( "stroke", "red" );
+        c.setAttribute( "stroke-width", 3);
+        c.r.baseVal.value = 20;
+        var d= document.createElementNS( "http://www.w3.org/2000/svg", "circle" );
+        d.setAttribute( "cx", x+5 );
+        d.setAttribute( "cy", y+5 );
+        d.setAttribute( "fill", "none" );
+        d.setAttribute( "stroke", "blue" );
+        d.setAttribute( "stroke-width", 3);
+        d.r.baseVal.value = 30;
+        svgdoc.rootElement.appendChild(d);
+        svgdoc.rootElement.appendChild(c);
+        //return svgdoc;
+
+}
+
+function getid(){
+    var id=document.getElementById("seatno").value;
+    var svgel=window.onload();
+    var att=svgel.getElementById(id);
+    var txt=svgel.getElementById("txt"+id);
+     //att.setAttribute("fill","blue");
+    att.setAttribute("fill","blue");
+    txt.firstChild.nodeValue="seatno";
+   	alert(att);
+
+
+	}
+
+</script>
+    <script>
+
+       $(document).ready(function(){
+          $("#button1").click(function(){
+            var no = $("#seatno").val();
+            //$.get("gps",{"seatno":no,csrfmiddlewaretoken: '{{ csrf_token }}'}, function(ret){
+            $.get("gps",{"seatno":no}, function(ret){
+                $("#hint").html(ret);
+            })
+          });
+
+        });
+</script>
+
+
+</head>
+<body>
+<div class="container">
+
+<form method="post">
+    {% csrf_token %}
+         座位编号：<input type="text" id="seatno" name="seatno" value="{{ pclist.seat_no }}" />
+    {% for pclist in pcs %}
+    座位编号：  {{ pclist.seat_no }}
+    -计算机名：  {{ pclist.host_name }}
+    -用户名：  {{ pclist.user_list.full_name }}
+    {% endfor %}
+    <br>
+
+         <input type="submit" id="button1" name="button1" value="提交" onclick="getid()"/>
+
+</form><p id="hint"></p>
+<embed id="svgfile" src="/static/14F.svg" type="image/svg+xml" />
+</div>
+</body>
+</html>

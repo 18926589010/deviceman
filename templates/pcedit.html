@@ -1,0 +1,292 @@
+<!-- extends 'headbase.html'   -->
+
+{% extends 'starter.html' %}
+
+{% block header %}
+
+      <h1>
+        设备管理
+        <small>编辑设备</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/deviceman/totalchart"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li >设备管理</li><li class="active">编辑设备</li>
+      </ol>
+
+{% endblock %}
+
+{% block content %}
+<head>
+
+
+
+  <script>
+
+
+function disposedajax(id){
+
+   // var id=$(ths).parent().parent().attr('nid');
+  //  var orderid="{{ request.session.orderid  }}";
+
+
+    //给传递的data加一个时间变量，时间由下面的var times获得，以解决在IE中工作不正常的问题
+    var times=new Date().getTime();
+
+//   if($('#op_rand_num'+var2).val()!=$("#rand_num").html())
+//{
+//    alert('请输入正确的操作验证码!');
+
+//}
+//   else
+//   {
+   var result = confirm('Delete this computer？确认请点[OK]！或者点[Cancel]取消');
+
+
+ if(result){
+    alert('确定Delete it！');
+
+
+    $.ajax({
+    type: 'GET',
+    url: '/deviceman/ajax_disposed_pc',
+    dataType: 'json',
+    data:{id:id,times:times},
+    success: function(ret){
+        alert(ret.state);
+        window.location.reload();
+
+
+                           }
+           });
+
+    }
+
+//}
+}
+
+
+
+
+
+
+
+
+
+function borrow(var1){
+
+
+window.location.href = "/deviceman/borrowscreate/"+var1;
+
+}
+
+
+function recallpc_confirm(var1){
+
+var result = confirm('收回/归还计算机'+var1+'？确认请点[OK]！ 取消点[Cancel]');
+ if(result){
+    alert('确定回收！');
+    window.location.assign("recallpc/"+var1);
+  }else{
+    alert('不回收！');
+    }
+}
+
+function dispose_confirm(var1){
+
+var result = confirm('申请报废计算机'+var1+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定申请报废！');
+    window.location.assign("dispose/"+var1);
+  }else{
+    alert('不申请！');
+    }
+}
+
+
+function search_confirm(){
+    var vpcid1 = document.getElementsByName("pcid");
+    if (vpcid1.length=0)
+    {
+     alert('不回收！');
+     }
+    }
+
+
+  $(document).ready(function(){
+  $("#input1").click(function(){
+    $("#p1").toggle("slow");
+  });
+});
+</script>
+
+</head>
+
+<body class=" hold-transition">
+
+
+
+<div  class="row">
+    <div class="col-xs-12 box">
+
+<div >
+    <p></p>
+
+            {% ifequal obj.user_list.value 193  %}
+    <p align="right">
+          <button type="button" class="btn btn-success" onclick="disposedajax({{ pcid }});">报废/删除</button>
+          {% else %}
+
+
+
+        <p align="right">
+          {% ifequal obj.user_list.value 180   %}
+          <button type="button" class="btn btn-success" onclick="borrow( {{ pcid }} );">借用</button>
+                    {% ifequal user.adm_info.pc_dispose 1 %}
+
+                    <button type="button" class="btn btn-success" onclick="dispose_confirm( {{ pcid }});">申请报废</button>
+                    {% endifequal  %}
+
+          {% else %}
+          <button type="button" class="btn btn-success" onclick="recallpc_confirm( {{ pcid }});">收回/归还</button>
+          {% endifequal %}
+
+          <a class="btn btn-primary " href="/deviceman/pctransfer/{{ pcid }}">资产转移</a>
+
+         <a class="btn btn-primary " href="/deviceman/createreprec/{{ pcid }}">维修记录</a>
+
+      </p>
+    {%  endifequal %}
+</div>
+<div  class="box-body">
+
+    <form action="{{ action }}" method="post">
+        {% csrf_token %}
+<table  class="table table-condensed" >
+<thead>
+           <tr>
+               <th align="center">Field</th>
+               <th>Values</th>
+
+
+           </tr>
+ </thead>
+ <tbody>
+
+           <tr>
+               <td > Device Name: </td>
+               <td >{{ obj.host_name }}{{ obj.host_name.errors }}</td>
+
+
+            </tr>
+
+
+           <tr>
+               <td > Service tag:  </td>
+               <td >{{ obj.service_tag }}{{ obj.service_tag.errors }}</td>
+
+
+            </tr>
+
+
+           <tr>
+               <td > Host Type  </td>
+               <td >  {{ obj.hosttype }}{{ obj.hosttype.errors }}             </td>
+            </tr>
+
+            <tr>
+               <td >Host Model:  </td>
+               <td >{{ obj.host_model }}*设备的型号{{ obj.host_model.errors }}</td>
+            </tr>
+
+             <tr>
+               <td >Host Spec:  </td>
+               <td >{{ obj.host_spec }}*设备的配置和规格{{ obj.host_spec.errors }}</td>
+            </tr>
+
+              <tr>
+               <td >Price:  </td>
+               <td >{{ obj.price }}{{ obj.price.errors }}</td>
+            </tr>
+              <tr>
+               <td >Receive Date:  </td>
+               <td >{{ obj.receive_date }}{{ obj.receive_date.errors }}</td>
+            </tr>
+              <tr>
+               <td >User Name:  </td>
+               <td >{{ obj.user_list }}{{ obj.user_list.errors }}</td>
+            </tr>
+
+
+               <tr>
+               <td >Seat No:  </td>
+               <td >{{ obj.seat_no }}{{ obj.seat_no.errors }}</td>
+            </tr>
+
+               <tr>
+               <td >Host Status:  </td>
+               <td >{{ obj.host_status }}{{ obj.host_status.errors }}</td>
+            </tr>
+
+               <tr>
+               <td >Studio:  </td>
+               <td >{{ obj.studio }}</td>
+            </tr>
+
+                <tr>
+               <td >Location:  </td>
+               <td >{{ obj.site }}  {{ obj.site.errors }}         </td>
+            </tr>
+               <tr>
+               <td >Asset Code:  </td>
+               <td >{{ obj.asset_code }}</td>
+            </tr>
+           <tr >
+                <td >Remark:  </td>
+               <td >{{ obj.remark }}</td>
+            </tr>
+            <tr >
+                <td >Mac Address:  </td>
+               <td >{{ obj.mac }}</td>
+            </tr>
+
+</tbody>
+</table>
+<div>
+
+            {% ifequal obj.user_list.value 193  %}
+
+            <p></p>
+          {% else %}
+           <input type="submit" value="保存" />
+
+           <input type="reset" value="重置" />
+
+
+            {%  endifequal %}
+</div>
+</form>
+ </div>
+</div>
+      </div>
+
+</body>
+
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %}
+
+    class="{{ message.tags }}"{% endif %}><font color="red"> {{ message }}</font></li>
+
+     <script>
+    alert('{{ message }}');
+        </script>
+
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'stationery/stat_base.html' %}}
+{% block content %}
+
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head>
+  <title>AECOM IT Device Manager Tools</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+    <script type="text/javascript">
+
+function resign_confirm(var1,var2){
+
+var result = confirm('清除计算机'+var2+'的用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定清除！');
+    window.navigate('update_pc?id='+var1);
+  }else{
+    alert('不清除！');
+    }
+}
+
+function collect_confirm(var1,var2){
+
+var result = confirm('回收计算机'+var2+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定回收！');
+    window.navigate('update_pc?id='+var1+'&action=collect');
+  }else{
+    alert('不回收！');
+    }
+}
+
+function dispose_confirm(var1,var2){
+
+var result = confirm('申请报废计算机'+var2+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定申请报废！');
+    window.navigate('update_pc?id='+var1+'&action=dispose');
+  }else{
+    alert('不申请！');
+    }
+}
+
+
+function search_confirm(){
+    var vpcid1 = document.getElementsByName("pcid");
+    if (vpcid1.length=0)
+    {
+     alert('不回收！');
+     }
+    }
+
+
+  $(document).ready(function(){
+  $("#input1").click(function(){
+    $("#p1").toggle("slow");
+  });
+});
+</script>
+
+</head>
+<body>
+
+
+
+ <a href="#"   class="list-group-item active" >
+     当前模块：清单报表->导出清单
+ </a>
+  <div  class="row">
+    <div class="col-sm-12">
+ <p></p>
+<div  class="table-responsive">
+<table class="table table-striped table-bordered">
+<thead>
+           <tr>
+             <th>#</th>
+             <th>清单名称</th>
+             <th>操作 --导出Excel</th>
+
+           </tr>
+ </thead>
+ <tbody>
+
+
+           <tr>
+             <td>1</td>
+             <td>01 文具清单</td>
+               <td>
+                  <a href="export2xls?id=1"> <span class="glyphicon glyphicon-question-sign"></span>导出Excel </a>
+
+               </td>
+            </tr>
+           <tr>
+             <td>2</td>
+             <td>02 领用清单</td>
+               <td>
+                   <a href="export2xls?id=2"> <span class="glyphicon glyphicon-question-sign"></span> 导出Excel</a>
+
+               </td>
+            </tr>
+
+           <tr>
+             <td>3</td>
+             <td>03 预警清单</td>
+               <td>
+                   <a href="export2xls?id=3"> <span class="glyphicon glyphicon-question-sign"></span> 导出Excel</a>
+
+               </td>
+            </tr>
+          <tr>
+             <td>4</td>
+             <td>04 入库清单</td>
+               <td>
+                   <a href="export2xls?id=4"> <span class="glyphicon glyphicon-question-sign"></span> 导出Excel</a>
+
+               </td>
+            </tr>
+
+</tbody>
+</table>
+      </div>
+
+
+
+  </div>
+</div>
+
+</body>
+</html>
+
+ {% endblock %}

@@ -1,0 +1,274 @@
+
+{% load staticfiles %}
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>文具领用</title>
+    <script src="/static/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="navbar-fixed-top.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+    <div class="container" style="font-size:14px">
+
+      <!-- Main component for a primary marketing message or call to action -->
+
+
+
+<div  class="row">
+
+    <div class="col-sm-4 cart">
+<span class="glyphicon glyphicon-shopping-cart"></span> 订单号：{{ request.session.orderid }}
+<table class="table table-striped table-bordered" id="t2" style="font-size:14px">
+<tr>
+            <th>No.</th>
+             <th>文具名称</th>
+              <th>数量</th>
+
+
+           </tr>
+ <tbody >
+           {% for cart in carts %}
+           <tr>
+                <td>{{ forloop.counter }}</td>
+               <td>{{ cart.stationery }}</td>
+               <td><a href="#" onclick="stat_decrease({{ cart.id }});">-</a> {{ cart.order_num }} <a href="#" onclick="stat_increase({{ cart.id }});" >+</a> <a href="#" onclick="stat_remove({{ cart.id }});"> <span class=" glyphicon glyphicon-trash"></span></a></td>
+
+
+           </tr>
+            {% endfor %}
+</tbody>
+</table>
+      <div align="left" >
+<ul>
+          <a href="#" onclick="clear_cart();" >
+              <span class="glyphicon glyphicon-question-sign"></span> 清空</a>
+--
+           <a href="submit_cart">
+          <span class="glyphicon glyphicon-question-sign"></span> 提交</a>
+</ul>
+
+</div>
+        </div>
+
+
+
+ </div>
+ </div>
+
+
+<script language="JavaScript">
+
+
+function clear_cart(){
+
+        var orderid="{{ request.session.orderid  }}";
+        $.ajax({
+            url:'clean_cart',
+            type:'GET',
+            data:{orderid:orderid},
+            datatype:'json',
+            success:function (ret) {
+                window.location.reload();
+                parent.window.location.reload();
+                // 回调函数 msg是服务器返回的字符串
+                console.log(ret);
+
+
+
+            }
+
+        })
+
+
+
+}
+
+
+function add_cart(ths) {
+       var id=$(ths).parent().parent().attr('nid');
+       var orderid="{{ request.session.orderid  }}";
+        $('table tbody#cart').html('');
+
+        $.ajax({
+            url:'ajax',
+            type:'GET',
+            data:{id:id, orderid:orderid},
+            datatype:'json',
+            success:function (ret) {
+                //parent.window.location.reload();
+                // 回调函数 msg是服务器返回的字符串
+                console.log(ret);
+
+
+            }
+
+        })
+
+    }
+
+
+function draw_cart(res){
+
+    //查询成功之后填充表格
+    var html = "";
+    var tdHead = "<td height='20'><div><span class='STYLE1'>";
+    var tdFoot = "</span></div></td>";
+    $("#t2 tr:gt(0)").remove();
+    //第一行是table的表格头不需清除。
+    for(var i=0;i<res.length;i++){
+    var countInfo = res[i];
+    var statname = countInfo.stationery__name;
+    //totalCount = countInfo[0];
+    var stat_id1= countInfo.id;
+    var stat_id2= countInfo.id;
+    var num_plus = " <a href='#' onclick='stat_increase("+stat_id1+");'>+</a>"+" <a href='#' onclick='stat_remove("+stat_id1+");'> <span class='glyphicon glyphicon-trash'></span></a>";
+    var num_min =  " <a href='#' onclick='stat_decrease("+stat_id1+");'>-</a> ";
+    //var sucCount = num_min + countInfo.order_num + num_plus;
+    var ordernum = num_min + countInfo.order_num + num_plus;
+    html += "<tr>" + tdHead + (i + 1) + tdFoot +
+    tdHead + statname + tdFoot +
+    tdHead + ordernum + tdFoot + "</tr>";
+    }
+$("#t2").append(html);
+//将新数据填充到table
+}
+
+
+function testajax(ths){
+
+    //var id=$(ths).parent().parent().attr('nid');
+    var id=$(ths).parent().parent().parent().attr('nid');
+    var orderid="{{ request.session.orderid  }}";
+
+    //给传递的data加一个时间变量，时间由下面的var times获得，以解决在IE中工作不正常的问题
+    var times=new Date().getTime();
+    $.ajax({
+    type: 'GET',
+    url: 'ajax',
+    dataType: 'json',
+    data:{id:id,orderid:orderid,times:times},
+    success: function(ret){
+    //查询成功之后填充表格
+    var html = "";
+    var tdHead = "<td height='20'><div><span class='STYLE1'>";
+    var tdFoot = "</span></div></td>";
+    $("#t2 tr:gt(0)").remove();
+    //第一行是table的表格头不需清除。
+    for(var i=0;i<ret.length;i++){
+    var countInfo = ret[i];
+    var statname = countInfo.stationery__name;
+    //totalCount = countInfo[0];
+    var stat_id1= countInfo.id;
+    var stat_id2= countInfo.id;
+    var num_plus = " <a href='#' onclick='stat_increase("+stat_id1+");'>+</a>"+" <a href='#' onclick='stat_remove("+stat_id1+");'> <span class='glyphicon glyphicon-trash'></span></a>";
+    var num_min =  " <a href='#' onclick='stat_decrease("+stat_id1+");'>-</a> ";
+    //var sucCount = num_min + countInfo.order_num + num_plus;
+    var ordernum = num_min + countInfo.order_num + num_plus;
+    html += "<tr>" + tdHead + (i + 1) + tdFoot +
+    tdHead + statname + tdFoot +
+    tdHead + ordernum + tdFoot + "</tr>";
+}
+$("#t2").append(html);
+//将新数据填充到table
+}
+});
+}
+
+
+function stat_increase(id)
+{
+  //var id=$(ths).parent().parent().attr('nid');
+    //var id=$(ths).parent().parent().parent().attr('nid');
+   var orderid="{{ request.session.orderid  }}";
+    //alert(id+" increase");
+    //给传递的data加一个时间变量，时间由下面的var times获得，以解决在IE中工作不正常的问题
+    var times=new Date().getTime();
+    $.ajax({
+    type: 'GET',
+    url: 'ajax_stat_increase',
+    dataType: 'json',
+    data:{id:id,orderid:orderid,times:times},
+    success: function(ret){
+    //parent.window.location.reload();
+    //查询成功之后填充表格
+    draw_cart(ret)
+    }
+});
+}
+
+function stat_decrease(id)
+{
+  //var id=$(ths).parent().parent().attr('nid');
+    //var id=$(ths).parent().parent().parent().attr('nid');
+   var orderid="{{ request.session.orderid  }}";
+    //alert(id+" decrease");
+    //给传递的data加一个时间变量，时间由下面的var times获得，以解决在IE中工作不正常的问题
+    var times=new Date().getTime();
+    $.ajax({
+    type: 'GET',
+    url: 'ajax_stat_decrease',
+    dataType: 'json',
+    data:{id:id,orderid:orderid,times:times},
+    success: function(ret){
+    //parent.window.location.reload();
+    //查询成功之后填充表格
+    draw_cart(ret)
+    }
+});
+}
+
+
+function stat_remove(id)
+{
+  //var id=$(ths).parent().parent().attr('nid');
+    //var id=$(ths).parent().parent().parent().attr('nid');
+   var orderid="{{ request.session.orderid  }}";
+    //alert(id+" decrease");
+    //给传递的data加一个时间变量，时间由下面的var times获得，以解决在IE中工作不正常的问题
+    var times=new Date().getTime();
+    $.ajax({
+    type: 'GET',
+    url: 'ajax_stat_remove',
+    dataType: 'json',
+    data:{id:id,orderid:orderid,times:times},
+    success: function(ret){
+    //parent.window.location.reload();
+    //查询成功之后填充表格
+      draw_cart(ret)
+    }
+
+});
+}
+
+
+
+
+</script>
+
+
+

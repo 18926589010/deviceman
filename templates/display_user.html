@@ -1,0 +1,126 @@
+ <!--  extends "headbase.html"  -->
+ {% extends 'starter.html' %}
+
+ {% block header %}
+
+      <h1>
+        用户管理
+        <small>用户信息</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/deviceman/totalchart"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">用户管理</li>
+      </ol>
+
+{% endblock %}
+
+{% load table_tags %}
+{% block content %}
+
+
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript">
+
+function resign_confirm(var1,var2){
+
+var result = confirm('清除计算机'+var2+'的用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定清除！');
+    window.navigate('update_pc?id='+var1);
+  }else{
+    alert('不清除！');
+    }
+}
+
+function collect_confirm(var1,var2){
+
+var result = confirm('回收计算机'+var2+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定回收！');
+    window.navigate('update_pc?id='+var1+'&action=collect');
+  }else{
+    alert('不回收！');
+    }
+}
+
+function dispose_confirm(var1,var2){
+
+var result = confirm('申请报废计算机'+var2+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定申请报废！');
+    window.navigate('update_pc?id='+var1+'&action=dispose');
+  }else{
+    alert('不申请！');
+    }
+}
+
+
+function search_confirm(){
+    var vpcid1 = document.getElementsByName("pcid");
+    if (vpcid1.length=0)
+    {
+     alert('不回收！');
+     }
+    }
+
+
+  $(document).ready(function(){
+  $("#input1").click(function(){
+    $("#p1").toggle("slow");
+  });
+});
+</script>
+
+</head>
+
+  <div  class="row">
+    <div class="col-sm-12 box" >
+
+<p></p>
+
+{% render_table user_lists %}
+
+ <p>
+ ---
+ </p>
+
+  <p>
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %}
+
+    class="{{ message.tags }}"{% endif %}><font color="red"> {{ message }}</font></li>
+
+
+
+    {% endfor %}
+</ul>
+
+
+{% endif %}
+
+      {% if messages %}
+<script>
+    {% for msg in messages %}
+        alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endif %}
+
+ </p>
+
+      <p></p>
+
+  </div>
+
+</div>
+
+</div>
+
+<
+
+ {% endblock %}

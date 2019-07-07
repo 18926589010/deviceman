@@ -1,0 +1,131 @@
+{% extends 'stationery/stat_base.html' %}
+{% block content %}
+
+<a href="#"   class="list-group-item active" >
+  当前模块：库存管理->入库查询
+    </a>
+<p></p>
+<div  class="row">
+
+    <div class="col-sm-12">
+
+ <h4 align="center">入库单信息</h4>
+
+
+
+<div>
+   <table class="table table-striped table-bordered">
+ <tbody>
+
+           <tr>
+               {% for pur in pur_masters %}
+               <td>入库单编号：</td><td>{{ pur.entryid  }}</td>
+               <td>供应商：</td><td> ---   </td>
+               <td>日期：</td><td> {{ pur.date  }}</td>
+               <td>经手人： </td><td>{{ user.first_name }}</td>
+
+                {% endfor %}
+           </tr>
+
+</tbody>
+</table>
+
+     <h4><font color="read">{{ msg }}</font></h4>
+
+
+  </div>
+
+ <div>
+
+
+ </div>
+
+<table class="table table-striped table-bordered">
+<thead>
+           <tr>
+             <th>序号</th>
+             <th>文具Name</th>
+              <th>数量</th>
+                <th>单位</th>
+               <th>Operation</th>
+           </tr>
+ </thead>
+ <tbody>
+           {% for pur_slave in pur_slaves %}
+           <tr>
+             <td>{{ forloop.counter }}</td>
+               <td>{{ pur_slave.stationery.name }}</td>
+               <td>{{ pur_slave.num}}</td>
+                <td>{{ pur_slave.stationery.units }}</td>
+               <td>
+
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					操作
+					<b class="caret"></b>
+				</a>
+
+				<ul class="dropdown-menu">
+                    {% ifequal 1 1 %}
+
+                    <li><a href="#" >--</a></li>
+                    {% endifequal %}
+
+				</ul>
+            </li>
+
+                </td>
+           </tr>
+            {% endfor %}
+</tbody>
+</table>
+       <a href="#" onclick='javascript:window.history.go(-1);'><button class="btn btn-primary"> 返回上一页</button></a>
+
+
+
+
+    </div>
+  
+ </div>
+
+
+<script language="JavaScript">
+
+function testajax(ths){
+
+    var id=$(ths).val();
+
+    $.ajax({
+    type: 'GET',
+    url: 'ajax_load_stationery',
+    dataType: 'json',
+    data:{stat_type_id:id},
+    success: function(ret){
+    //查询成功之后填充select option
+    var html = "";
+
+    //用for循环遍历返回结果。
+    for(var i=0;i<ret.length;i++){
+    var iteam = ret[i];
+    var id = iteam.id;
+
+    var name = iteam.name;
+
+    html += "<option value="+iteam.id+">"+iteam.name+"</option>";
+
+}
+$("#id_stationery").html(html);
+//将新数据填充到option
+}
+});
+}
+
+
+</script>
+
+
+
+
+
+{% endblock %}
+

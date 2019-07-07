@@ -1,0 +1,197 @@
+{% extends 'stationery/stat_base.html' %}
+{% block content %}
+ 【当前】-【首页】
+<div  class="row">
+
+    <div class="col-sm-8">
+
+ <h4>文具总体情况</h4>
+<table class="table table-striped table-bordered">
+<thead>
+           <tr>
+             <th>序号</th>
+             <th>文具类别</th>
+              <th>数量</th>
+
+               <th>Operation</th>
+           </tr>
+ </thead>
+ <tbody>
+           {% for stat in stats %}
+           <tr>
+             <td>{{ forloop.counter }}</td>
+               <td>{{ stat.1 }}</a></td>
+               <td>{{ stat.2 }}</td>
+
+               <td>
+
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					操作
+					<b class="caret"></b>
+				</a>
+
+				<ul class="dropdown-menu">
+                    {% ifequal 1 1 %}
+					<li><a href="stat_list?id={{ stat.0 }}" target="_blank"> 显示清单</a></li>
+					<li><a href="#" onclick="collect_confirm('{{pc_list.id}}','{{pc_list.host_name}}')">入库</a></li>
+                    <li><a href="#" >--</a></li>
+                    {% endifequal %}
+
+				</ul>
+            </li>
+
+                </td>
+           </tr>
+            {% endfor %}
+</tbody>
+</table>
+------------------
+<h4><font color="red">库存预警</font></h4>
+  <table class="table table-striped table-bordered">
+<thead>
+           <tr>
+             <th>序号</th>
+             <th>文具名称</th>
+              <th>当前库存量</th>
+            <th>库存告警线</th>
+               <th>Operation</th>
+           </tr>
+ </thead>
+
+ <tbody >
+           {% for stock_alert in stock_alerts %}
+           <tr>
+               <td><font color="red" >{{ forloop.counter }}</font></td>
+               <td><font color="red" >{{ stock_alert.name }}</font></td>
+               <td><font color="red" >{{ stock_alert.stock_num }}</font></td>
+               <td>{{ stock_alert.alert_num }}</td>
+               <td>
+
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					操作
+					<b class="caret"></b>
+				</a>
+
+				<ul class="dropdown-menu">
+                    {% ifequal 1 1 %}
+					<li><a href="stat_list?id={{ stat.0 }}" target="_blank"> 加入采购单</a></li>
+					<li><a href="#" onclick="collect_confirm('{{pc_list.id}}','{{pc_list.host_name}}')">入库</a></li>
+                    <li><a href="#" ></a></li>
+                    {% endifequal %}
+
+				</ul>
+            </li>
+
+                </td>
+           </tr>
+            {% endfor %}
+</tbody>
+
+</table>
+--------------
+<h4><font color="red">消耗量前十文具</font></h4>
+  <table class="table table-striped table-bordered">
+<thead>
+           <tr>
+             <th>序号</th>
+             <th>文具名称</th>
+              <th>总消耗量</th>
+            <th>--</th>
+               <th>Operation</th>
+           </tr>
+ </thead>
+
+ <tbody >
+           {% for stock_alert in stock_alerts %}
+           <tr>
+               <td>{{ forloop.counter }}</td>
+               <td>{{ stock_alert.name }}</td>
+               <td>{{ stock_alert.stock_num }}</td>
+               <td>--</td>
+               <td>
+
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					操作
+					<b class="caret"></b>
+				</a>
+
+				<ul class="dropdown-menu">
+                    {% ifequal 1 1 %}
+					<li><a href="stat_list?id={{ stat.0 }}" target="_blank"> 加入采购单</a></li>
+					<li><a href="#" onclick="collect_confirm('{{pc_list.id}}','{{pc_list.host_name}}')">入库</a></li>
+                    <li><a href="#" ></a></li>
+                    {% endifequal %}
+
+				</ul>
+            </li>
+
+                </td>
+           </tr>
+            {% endfor %}
+</tbody>
+
+</table>
+
+
+
+
+
+
+
+
+    </div>
+        <div class="col-sm-4">
+<h4 >待处理领用申请单</h4>
+<table class="table table-striped table-bordered">
+<thead>
+           <tr>
+             <th>序号</th>
+             <th>申请单号</th>
+              <th>员工姓名</th>
+
+               <th>Operation</th>
+           </tr>
+ </thead>
+ <tbody>
+           {% for order in orders %}
+           <tr>
+             <td>{{ forloop.counter }}</td>
+               <td>{{ order.id }}</a></td>
+               <td>{{ order.user_list}}</td>
+
+               <td>
+
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					操作
+					<b class="caret"></b>
+				</a>
+
+				<ul class="dropdown-menu">
+                    {% ifequal 1 1 %}
+					<li><a href="order_detail?orderid={{ order.id }}" target="_blank"> 查看详细</a></li>
+					<li><a href="#" onclick="collect_confirm('{{pc_list.id}}','{{pc_list.host_name}}')">--</a></li>
+                    <li><a href="#" >--</a></li>
+                    {% endifequal %}
+
+				</ul>
+            </li>
+
+                </td>
+           </tr>
+            {% endfor %}
+</tbody>
+</table>
+
+
+
+
+        </div>
+ </div>
+
+
+{% endblock %}
+

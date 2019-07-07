@@ -1,0 +1,119 @@
+<!-- extends 'headbase.html'   -->
+
+{% extends 'starter.html' %}
+
+{% block header %}
+
+      <h1>
+        设备管理
+        <small>Device Log</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/deviceman/totalchart"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li >设备管理</li><li class="active">Device Log</li>
+      </ol>
+
+{% endblock %}
+
+
+
+
+
+
+{% block content %}
+<head>
+
+
+  <script>
+
+
+
+function borrow(var1){
+
+
+window.location.href = "/deviceman/borrowscreate?pcid="+var1;
+
+}
+
+
+function recallpc_confirm(var1){
+
+var result = confirm('回收计算机'+var1+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定回收！');
+    window.location.assign("recallpc/"+var1);
+  }else{
+    alert('不回收！');
+    }
+}
+
+function dispose_confirm(var1){
+
+var result = confirm('申请报废计算机'+var1+'、清除用户信息？确认请点[OK]！或者点[Cancel]取消');
+ if(result){
+    alert('确定申请报废！');
+    window.navigate('dispose/'+var1);
+  }else{
+    alert('不申请！');
+    }
+}
+
+
+function search_confirm(){
+    var vpcid1 = document.getElementsByName("pcid");
+    if (vpcid1.length=0)
+    {
+     alert('不回收！');
+     }
+    }
+
+
+  $(document).ready(function(){
+  $("#input1").click(function(){
+    $("#p1").toggle("slow");
+  });
+});
+</script>
+
+</head>
+<body>
+
+
+
+  <div  class="row">
+    <div class="col-sm-12 box">
+
+
+<div  class="table-responsive">
+
+
+ </div>
+
+
+  <p></p>
+ {% load table_tags %}
+{% render_table device_op_logs %}
+
+  </div>
+
+
+
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %}
+
+    class="{{ message.tags }}"{% endif %}><font color="red"> {{ message }}</font></li>
+
+     <script>
+    alert('{{ message }}');
+        </script>
+
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+
+</body>
+{% endblock %}

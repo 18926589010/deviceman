@@ -1,0 +1,125 @@
+<!-- extends 'headbase.html'   -->
+
+{% extends 'starter.html' %}
+
+{% block header %}
+
+      <h1>
+        设备管理
+        <small>维修记录</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/deviceman/totalchart"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li >设备管理</li><li class="active">维修记录</li>
+      </ol>
+
+{% endblock %}
+
+{%  block content   %}
+
+
+  <div  class="row">
+      <div class="col-xs-12 box">
+<p>
+
+
+
+    <form action="#" method="POST" novalidate="novalidate">
+      {% csrf_token %}
+      <table  class="table table-condensed" >
+<thead>
+           <tr>
+               <th align="center">Field</th>
+               <th>Values</th>
+
+           </tr>
+ </thead>
+ <tbody>
+
+           <tr>
+               <td > Host Name: </td>
+               <td >{{ objs.pc_list}}{{ obj.pc_list.errors }}
+
+
+
+
+               </td>
+            </tr>
+
+
+           <tr>
+               <td > Description:  </td>
+               <td >{{ objs.problem_desc }}{{ objs.problem_desc.errors }}    </td>
+            </tr>
+
+
+           <tr>
+               <td > Report Date  </td>
+               <td >  {{ objs.rp_date }}{{ objs.rp_date.errors }}             </td>
+            </tr>
+
+
+             <tr>
+               <td >Fix Result:  </td>
+               <td >{{ objs.fix_result }}{{ objs.fix_result.errors }}</td>
+            </tr>
+
+              <tr>
+               <td >Fix Date:  </td>
+               <td >{{ objs.fix_date}}{{ objs.fix_date.errors }}</td>
+            </tr>
+                       <tr>
+               <td >IT Name:  </td>
+               <td >{{ objs.User}}{{ objs.User.errors }}</td>
+            </tr>
+
+
+</tbody>
+</table>
+
+
+        <input type="submit" value="提交" id="two">
+    </form>
+
+         </div>
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+<script>
+$('#user_list').select2({
+    minimumInputLength: 3,
+    ajax:
+        {
+            url: "/deviceman/ajax_get_user_list",
+            dataType: 'json',
+            type: 'GET',
+            delay: 250,
+            data: function (params) {
+            return {
+            search: params.term,
+                    }
+                                    },
+
+            processResults: function (data) {
+            return {
+            results: data
+                    };
+                                            },
+
+            cache: true
+        },
+
+});
+
+</script>
+
+{% endblock %}

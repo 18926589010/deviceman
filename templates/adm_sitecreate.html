@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/static/jquery-3.3.1.js"></script>
+
+    <script type="text/javascript"></script>
+
+</head>
+
+
+
+<body>
+
+<div class="container">
+    {%  include "headbase.html" %}
+    <a href="#"   class="list-group-item active" >
+  当前模块：系统设置 - IT员工授权管理
+    </a>
+  <div  class="row">
+    <div class="col-sm-12">
+<p>
+
+{% load table_tags %}
+{% render_table bls %}
+----
+        <p>创建IT管理员授权</p>
+
+    <form action="/deviceman/sitepermission/{{ request.session.User_id }}/" method="POST" novalidate="novalidate">
+        {% csrf_token %}
+
+        {{ obj.as_table }}
+
+        <input type="submit" value="Add">
+    </form>
+       {{ status  }}
+
+        </p>
+
+
+
+
+    </div>
+  </div>
+</body>
+
+
+
+
+</html>

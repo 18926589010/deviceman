@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:o="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>showusers</title>
+
+</head>
+<body>
+AECOM Luohu Office users liset
+
+<div class="container">
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+  <td width=49 valign=top style='width:42.15pt;border:solid windowtext 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;</o:p></p>
+  </td>
+  <td width=81 valign=top style='width:70.85pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;</o:p></p>
+  </td>
+  <td width=221 valign=top style='width:7.0cm;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;</o:p></p>
+  </td>
+  <td width=252 valign=top style='width:8.0cm;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;</o:p></p>
+  </td>
+  <td width=104 valign=top style='width:92.15pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;</o:p></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+  <td  valign=top style='width:86.3pt;border:solid windowtext 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>ID</o:p></p>
+  </td>
+  <td  valign=top style='width:86.3pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>User Name</o:p></p>
+  </td>
+  <td  valign=top style='width:86.3pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;Full Name</o:p></p>
+  </td>
+  <td  valign=top style='width:86.3pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;Email Address</o:p></p>
+  </td>
+  <td  valign=top style='width:86.3pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>Department</o:p></p>
+  </td>
+ </tr>
+   {% for user in users %}
+ <tr style='mso-yfti-irow:1;mso-yfti-lastrow:yes'>
+  <td  valign=top style='width:86.3pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;{{ user.id }}</o:p></p>
+  </td>
+  <td  valign=top style='width:86.3pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>{{ user.user_name }}</o:p></p>
+  </td>
+  <td  valign=top style='width:86.3pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>{{ user.full_name }}</o:p></p>
+  </td>
+  <td  valign=top style='width:86.3pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;{{ user.email_address }}</o:p></p>
+  </td>
+  <td  valign=top style='width:86.3pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt;line-height:
+  normal'><o:p>&nbsp;{{ user.dept_id }}</o:p></p>
+  </td>
+ </tr>
+    {% endfor %}
+
+    </table>
+<ul class="pagination" id="pager">
+        {#上一页按钮开始#}
+        {# 如果当前页有上一页#}
+        {% if users.has_previous %}
+            {#  当前页的上一页按钮正常使用#}
+          {#  <li class="previous"><a href="./showusers/?page={{ users.previous_page_number }}">上一页</a></li> #}
+            <a href="./showusers/?page={{ users.previous_page_number }}">上一页</a>
+        {% else %}
+            {# 当前页的不存在上一页时,上一页的按钮不可用#}
+            {# <li class="previous disabled"><a href="#">上一页</a></li> #}
+            <a href="#">上一页</a>
+        {% endif %}
+        {#上一页按钮结束#}
+        {# 页码开始#}
+        {% for num in paginator.page_range %}
+
+            {% if num == currentPage %}
+            {#  <li class="item active"><a href="./showusers/?page={{ num }}">{{ num }}</a></li> #}
+             <a href="./showusers/?page={{ num }}">{{ num }}</a>
+            {% else %}
+             {#   <li class="item"><a href="./showusers/?page={{ num }}">{{ num }}</a></li> #}
+            <a href="./showusers/?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {#页码结束#}
+        {# 下一页按钮开始#}
+        {% if users.has_next %}
+            <li class="next"><a href="./showusers/?page={{ users.next_page_number }}">下一页</a></li>
+        {% else %}
+            <li class="next disabled"><a href="#">下一页</a></li>
+        {% endif %}
+        {# 下一页按钮结束#}
+    </ul>
+
+
+
+
+</body>
+</html>

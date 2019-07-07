@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load table_tags %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/static/jquery-3.3.1.js"></script>
+
+    <script type="text/javascript"></script>
+
+</head>
+
+
+
+<body>
+
+<div class="container">
+    {%  include "headbase.html" %}
+    <a href="#"   class="list-group-item active" >
+  当前模块：系统设置 - 部门管理
+    </a>
+  <div  class="row">
+    <div class="col-sm-12">
+<p>
+
+
+{% render_table bls %}
+
+    <form action="/deviceman/deptcreate" method="POST" novalidate="novalidate">
+        {% csrf_token %}
+        {{ obj.as_table }}
+
+        <input type="submit" value="Add">
+    </form>
+
+    ----------
+        <p> ** 注意：部门名称的后缀 【- 办公室】名称（如:- Luohu)不需要输入, 输入IT， 保存自动会变为IT - Luohu，以用于区分不同办公室相同的部门名称</p>
+
+
+
+       {{ status  }}
+
+        </p>
+
+
+
+
+    </div>
+  </div>
+</body>
+
+
+
+
+</html>

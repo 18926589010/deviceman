@@ -1,0 +1,159 @@
+{% extends 'stationery/stat_base.html' %}
+{% block content %}
+
+<a href="#"   class="list-group-item active" >
+  当前模块：库存管理->Wenju入库
+    </a>
+<p></p>
+<div  class="row">
+
+    <div class="col-sm-12">
+
+ <h4 ><font color="read">新入库单</font></h4>
+
+{% if  not request.session.entryid   %}
+  <div>
+      <form method="post" action="add_pur_master">
+          {%  csrf_token  %}
+      入库单编号.:<input type="text" id="entryid" name="entryid" value="{{ request.session.entryid  }}">  经手人: <input type="text" id="username" name="username" value="{{ user.first_name }}"><input hidden type="text" id="user_id" name="user_id" value="{{ user.id }}">
+      <input type="submit" value="OK">
+      </form>
+        <h4><font color="red">{{ msg }}</font></h4>
+      </div>
+{% else  %}
+
+<div>
+   <table class="table table-striped table-bordered">
+ <tbody>
+
+           <tr>
+               <td>入库单编号：</td><td>{{ request.session.entryid  }}</td>
+               <td>供应商：</td><td> ---   </td>
+               <td>经手人： </td><td>{{ user.first_name }}</td>
+
+
+           </tr>
+
+</tbody>
+</table>
+
+     <h4><font color="read">{{ msg }}</font></h4>
+
+
+  </div>
+
+ <div>
+
+   <form method="post" action="update_pur_slave">
+{% csrf_token  %}
+
+ 文具名称:    <select  name="id_stat_type" id="id_stat_type" onchange="testajax(this);">
+        <option value="">-类别-</option>
+        {%  for stat_type in stat_types   %}
+        <option value="{{ stat_type.id }}">{{  stat_type.name  }}</option>
+        {% endfor %}
+                     </select>
+
+<select  name="id_stationery" id="id_stationery">
+        <option value="">-名称-</option>
+        {%  for stationery in stationerys   %}
+        <option value="{{ stationery.id }}">{{  stationery.name  }}</option>
+        {% endfor %}
+                     </select>
+        数量:<input type="number" id="pur_num" name="pur_num" value="10"> <label> 个/本/支</label><input type="submit" value="添加">
+    </form>
+
+ </div>
+
+<table class="table table-striped table-bordered">
+<thead>
+           <tr>
+             <th>序号</th>
+             <th>文具Name</th>
+              <th>数量</th>
+                <th>单位</th>
+               <th>Operation</th>
+           </tr>
+ </thead>
+ <tbody>
+           {% for pur in purs %}
+           <tr>
+             <td>{{ forloop.counter }}</td>
+               <td>{{ pur.stationery.name }}</td>
+               <td>{{ pur.num}}</td>
+                <td>{{ pur.stationery.units }}</td>
+               <td>
+
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					操作
+					<b class="caret"></b>
+				</a>
+
+				<ul class="dropdown-menu">
+                    {% ifequal 1 1 %}
+					<li><a href="removefrompur?id={{ pur.stationery.id }}&entryid={{ request.session.entryid  }}" > Delete</a></li>
+
+                    {% endifequal %}
+
+				</ul>
+            </li>
+
+                </td>
+           </tr>
+            {% endfor %}
+</tbody>
+</table>
+
+        <p>
+			<a href="submit_pur" ><button type="button" class="btn btn-default btn-primary">提交</button></a>
+			</p>
+
+{% endif %}
+
+
+    </div>
+
+ </div>
+
+
+<script language="JavaScript">
+
+function testajax(ths){
+
+    var id=$(ths).val();
+
+    $.ajax({
+    type: 'GET',
+    url: 'ajax_load_stationery',
+    dataType: 'json',
+    data:{stat_type_id:id},
+    success: function(ret){
+    //查询成功之后填充select option
+    var html = "";
+
+    //用for循环遍历返回结果。
+    for(var i=0;i<ret.length;i++){
+    var iteam = ret[i];
+    var id = iteam.id;
+
+    var name = iteam.name;
+
+    html += "<option value="+iteam.id+">"+iteam.name+"</option>";
+
+}
+$("#id_stationery").html(html);
+//将新数据填充到option
+}
+});
+}
+
+
+</script>
+
+
+
+
+
+{% endblock %}
+

@@ -1,0 +1,147 @@
+<!-- extends 'headbase.html'   -->
+
+{% extends 'starter.html' %}
+
+{% block header %}
+
+      <h1>
+        设备管理
+        <small>资产转移</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="/deviceman/totalchart"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li >设备管理</li><li class="active">资产转移</li>
+      </ol>
+
+{% endblock %}
+
+
+{%  block content   %}
+
+
+  <div  class="row">
+      <div class="col-xs-12 box">
+<p>
+    <form action="#" method="POST" novalidate="novalidate">
+      {% csrf_token %}
+      <table  class="table table-condensed" >
+<thead>
+           <tr>
+               <th align="center">Field</th>
+               <th>Values</th>
+
+           </tr>
+ </thead>
+ <tbody>
+
+           <tr>
+               <td > Host Name: </td>
+               <td >{{ obj.pc_list}}{{ obj.pc_list.errors }}
+
+<!--
+ <select id="user_list" name="user_list" style="width:30%" >
+    <option value="">please select user------</option>
+     <option value="1">honghai</option>
+     <option value="1">liiu</option>
+
+        {% for user_list in user_lists %}
+            <option value={{ user_list.id }}>{{ user_list.full_name }}</option>
+        {% endfor %}
+</select>
+
+
+<p class="p2"></p>
+-->
+               </td>
+            </tr>
+
+
+           <tr>
+               <td > 转出 Site:  </td>
+               <td >{{ obj.source_site }}{{ obj.source_site.errors }}    </td>
+            </tr>
+
+
+           <tr>
+               <td > 转入 Site  </td>
+               <td >  {{ obj.dest_site }}{{ obj.dest_site.errors }}             </td>
+            </tr>
+
+
+             <tr>
+               <td > 转移日期:  </td>
+               <td >{{ obj.transfer_date }}{{ obj.transfer_date.errors }}</td>
+            </tr>
+              <tr>
+               <td >IT 姓名:  </td>
+               <td >{{ obj.User}}{{ obj.User.errors }}{{ obj.user.value  }}</td>
+            </tr>
+              <tr>
+               <td >备注:  </td>
+               <td >{{ obj.remark}}{{ obj.remark.errors }}</td>
+            </tr>
+
+
+</tbody>
+</table>
+
+
+        <input type="submit" value="提交" id="two">
+    </form>
+
+      </div>
+  </div>
+
+
+
+
+
+
+
+
+
+<script>
+$('#user_list').select2({
+    minimumInputLength: 3,
+    ajax:
+        {
+            url: "/deviceman/ajax_get_user_list",
+            dataType: 'json',
+            type: 'GET',
+            delay: 250,
+            data: function (params) {
+            return {
+            search: params.term,
+                    }
+                                    },
+
+            processResults: function (data) {
+            return {
+            results: data
+                    };
+                                            },
+
+            cache: true
+        },
+
+});
+
+</script>
+
+ {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{% if message.tags %}
+
+    class="{{ message.tags }}"{% endif %}><font color="red"> {{ message }}</font></li>
+
+     <script>
+    alert('{{ message }}');
+        </script>
+
+    {% endfor %}
+</ul>
+
+{% endif %}
+
+{% endblock %}
