@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 #import select2
 from django.forms import fields
-#from select2.fields import  forms
-# Create your models here.
-import json
+
+
+
 
 class borrows(models.Model):
     user_list=models.ForeignKey('user_list', to_field='id',  on_delete=None)
