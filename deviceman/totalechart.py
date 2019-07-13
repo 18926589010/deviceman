@@ -9,6 +9,7 @@ from django.db.models import Count, Sum
 from datetime import datetime
 import redis
 
+#this is process chart and render chart to the page
 
 def get_device_total(request):
     siteid = request.session.get('current_site')
