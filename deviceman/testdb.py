@@ -25,31 +25,7 @@ def update_device_log(pc_list_id, user_list_id, operation_type_id, op_time=str(d
     print('add a record to the device log table')
     return '1'
 
-# class PcAutocomplete(autocomplete.Select2QuerySetView):
-#     def get_queryset(self):
-#         # Don't forget to filter out results depending on the visitor !
-#         # if not self.request.user.is_authenticated():
-#         #     return Country.objects.none()
-#
-#         qs = pc_list.objects.all()
-#
-#         if self.q:
-#             qs = qs.filter(host_name__icontains=self.q)
-#
-#         return qs
-#
-# class UserAutocomplete(autocomplete.Select2QuerySetView):
-#         def get_queryset(self):
-#             # Don't forget to filter out results depending on the visitor !
-#             if not self.request.user.is_authenticated():
-#                 return user_list.objects.none()
-#
-#             qs = user_list.objects.all()
-#
-#             if self.q:
-#                 qs = qs.filter(full_name__icontains=self.q)
-#
-#             return qs
+
 
 def get_site_list(request):
 
