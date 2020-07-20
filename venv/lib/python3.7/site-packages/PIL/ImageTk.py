@@ -291,12 +291,12 @@ def _show(image, title):
     """Helper for the Image.show method."""
 
     class UI(tkinter.Label):
-        def __init__(self, master, im):
+        def __init__(self, main, im):
             if im.mode == "1":
-                self.image = BitmapImage(im, foreground="white", master=master)
+                self.image = BitmapImage(im, foreground="white", main=main)
             else:
-                self.image = PhotoImage(im, master=master)
-            tkinter.Label.__init__(self, master, image=self.image, bg="black", bd=0)
+                self.image = PhotoImage(im, main=main)
+            tkinter.Label.__init__(self, main, image=self.image, bg="black", bd=0)
 
     if not tkinter._default_root:
         raise IOError("tkinter not initialized")

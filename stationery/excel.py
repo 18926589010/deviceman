@@ -82,7 +82,7 @@ def export2xls(request):
         if id == '2':
             response['Content-Disposition'] = 'attachment;filename=02 Application.xls'  # 指定返回文件名
 
-            sql = "SELECT u.full_name,d.dept_name, st.name,sl.order_num,  m.date FROM deviceman.stationery_order_record_master as m, deviceman.deviceman_user_list as u, deviceman.deviceman_dept_list as d,deviceman.stationery_order_record_slave as sl, deviceman.stationery_stationery as st where m.user_list_id=u.id and u.dept_list_id=d.id  and sl.order_record_master_id=m.id and sl.stationery_id=st.id and m.order_status='Completed'"
+            sql = "SELECT u.full_name,d.dept_name, st.name,sl.order_num,  m.date FROM deviceman.stationery_order_record_main as m, deviceman.deviceman_user_list as u, deviceman.deviceman_dept_list as d,deviceman.stationery_order_record_subordinate as sl, deviceman.stationery_stationery as st where m.user_list_id=u.id and u.dept_list_id=d.id  and sl.order_record_main_id=m.id and sl.stationery_id=st.id and m.order_status='Completed'"
             sheet = wb.add_sheet(u'02 application')  # excel里添加类别
 
 
