@@ -22,13 +22,13 @@ class stationery(models.Model):
     def __str__(self):
         return self.name
 
-class order_record_master(models.Model):
+class order_record_main(models.Model):
     user_list = models.ForeignKey('deviceman.user_list',on_delete=False)
     date = models.DateField()
     order_status = models.CharField(max_length=40)
 
-class order_record_slave(models.Model):
-    order_record_master = models.ForeignKey('order_record_master',on_delete=False)
+class order_record_subordinate(models.Model):
+    order_record_main = models.ForeignKey('order_record_main',on_delete=False)
     stationery = models.ForeignKey('stationery',on_delete=False)
     order_num = models.IntegerField()
 
@@ -41,7 +41,7 @@ class order_record_slave(models.Model):
 #     user = models.ForeignKey('auth.user',on_delete=False, default=1)
 
 
-class purchase_master(models.Model):
+class purchase_main(models.Model):
     date = models.DateField()
     provider = models.ForeignKey('provider', on_delete=False)
     user = models.ForeignKey('auth.user',on_delete=False, default='liuhh')
@@ -50,8 +50,8 @@ class purchase_master(models.Model):
     def __str__(self):
         return self.entryid
 
-class purchase_slave(models.Model):
-    entryid = models.ForeignKey('purchase_master',  on_delete=False)
+class purchase_subordinate(models.Model):
+    entryid = models.ForeignKey('purchase_main',  on_delete=False)
     stationery = models.ForeignKey('stationery', on_delete=False)
     num = models.IntegerField()
 

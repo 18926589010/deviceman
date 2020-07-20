@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='order_record_master',
+            name='order_record_main',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField()),
@@ -31,11 +31,11 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='order_record_slave',
+            name='order_record_subordinate',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('order_num', models.IntegerField()),
-                ('order_record_master', models.ForeignKey(on_delete=False, to='stationery.order_record_master')),
+                ('order_record_main', models.ForeignKey(on_delete=False, to='stationery.order_record_main')),
             ],
         ),
         migrations.CreateModel(
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='purchase_master',
+            name='purchase_main',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField()),
@@ -61,11 +61,11 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='purchase_slave',
+            name='purchase_subordinate',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('num', models.IntegerField()),
-                ('entryid', models.ForeignKey(on_delete=False, to='stationery.purchase_master')),
+                ('entryid', models.ForeignKey(on_delete=False, to='stationery.purchase_main')),
             ],
         ),
         migrations.CreateModel(
@@ -89,12 +89,12 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AddField(
-            model_name='purchase_slave',
+            model_name='purchase_subordinate',
             name='stationery',
             field=models.ForeignKey(on_delete=False, to='stationery.stationery'),
         ),
         migrations.AddField(
-            model_name='order_record_slave',
+            model_name='order_record_subordinate',
             name='stationery',
             field=models.ForeignKey(on_delete=False, to='stationery.stationery'),
         ),

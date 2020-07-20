@@ -171,8 +171,8 @@ class DatabaseOperations(BaseDatabaseOperations):
         WITH tables AS (
             SELECT %s name
             UNION
-            SELECT sqlite_master.name
-            FROM sqlite_master
+            SELECT sqlite_main.name
+            FROM sqlite_main
             JOIN tables ON (sql REGEXP %s || tables.name || %s)
         ) SELECT name FROM tables;
         """
