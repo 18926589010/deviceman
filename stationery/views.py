@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from stationery.models import stationery, stat_type, provider, order_record_master, order_record_slave, purchase_master, \
-    purchase_slave
+from stationery.models import stationery, stat_type, provider, order_record_main, order_record_subordinate, purchase_main, \
+    purchase_subordinate
 from django.db.models import Count, Sum
 from django.http import HttpResponseRedirect, HttpResponse
 from deviceman.models import user_list
@@ -24,7 +24,7 @@ def index(request):
     stats = stationery.objects.values_list('stat_type', 'stat_type__name').annotate(Count('stat_type'))
     print(stats.query)
     print(stats)
-    orders = order_record_master.objects.filter(order_status='submitted')
+    orders = order_record_main.objects.filter(order_status='submitted')
     print(orders)
     stock_alerts = stationery.objects.filter(alert_num__gte=F('stock_num')).order_by('stock_num')[0:10]
     return render(request, 'stationery/stat_index.html',
@@ -37,7 +37,7 @@ def alert_stat_list(request):
     # stats = stationery.objects.values_list('stat_type', 'stat_type__name').annotate(Count('stat_type'))
     # print(stats.query)
     # print(stats)
-    # orders = order_record_master.objects.filter(order_status='submitted')
+    # orders = order_record_main.objects.filter(order_status='submitted')
     # print(orders)
     stock_alerts = stationery.objects.filter(alert_num__gte=F('stock_num')).order_by('stock_num')[0:10]
     return render(request, 'stationery/alert_stat_list.html',
@@ -45,7 +45,7 @@ def alert_stat_list(request):
 
 def orderlist(request):
 
-    orders = order_record_master.objects.filter(order_status='submitted')
+    orders = order_record_main.objects.filter(order_status='submitted')
 
     return render(request, 'stationery/orderlist.html',
                   {'orders': orders})
@@ -60,8 +60,8 @@ def stat_list(request):
 
 def order_detail(request):
     orderid = request.GET.get('orderid')
-    orders = order_record_slave.objects.filter(order_record_master_id=orderid)
-    users = order_record_master.objects.filter(id=orderid)
+    orders = order_record_subordinate.objects.filter(order_record_main_id=orderid)
+    users = order_record_main.objects.filter(id=orderid)
 
     # userid = users[0]['user_list_id']
     # users_list = user_list.objects.filter(id=userid)
@@ -86,7 +86,7 @@ def stat_apply_index(request):
     if user_list_id == None:
         return HttpResponseRedirect('apply_login')
     cart = request.session.get("cart", None)
-    carts = order_record_slave.objects.filter(order_record_master_id=orderid)
+    carts = order_record_subordinate.objects.filter(order_record_main_id=orderid)
     if request.method == 'GET':
 
         if 'id' in request.GET:
@@ -108,7 +108,7 @@ def stat_apply_index(request):
         # return render(request, 'stationery/stat_apply_index.html', locals())
 
         else:
-            stationerys = order_record_slave.objects.values('stationery__spec').annotate(number=Sum("order_num"),
+            stationerys = order_record_subordinate.objects.values('stationery__spec').annotate(number=Sum("order_num"),
                                                                                          spec=F('stationery__spec'),
                                                                                          id=F('stationery_id'),
                                                                                          name=F('stationery__name'),
@@ -133,8 +133,8 @@ def add_to_cart(request):
     user_list_id = request.session.get('user_list_id', None)
     statid = request.GET.get('statid')
     # obj=models.order_record(stationery_id=20,user_list_id=243, num=1)
-    order_record_master.objects.create(order_status='submitted', user_list_id=243, date='2018-08-30')
-    order_record_slave.objects.create(order_num=1, order_record_master_id=3, stationery_id=12)
+    order_record_main.objects.create(order_status='submitted', user_list_id=243, date='2018-08-30')
+    order_record_subordinate.objects.create(order_num=1, order_record_main_id=3, stationery_id=12)
     # obj.save()
     # carts=order_record.objects.filter(user_list_id=243)
     # print(carts)
@@ -145,8 +145,8 @@ def clean_cart(request):
     ##清除购物车列表
     user_list_id = request.session.get('user_list_id')
     orderid = request.session.get('orderid')
-    order_record_slave.objects.filter(order_record_master_id=orderid).delete()
-    # order_record_master.objects.filter(user_list_id=user_list_id, order_status='shopping').delete()
+    order_record_subordinate.objects.filter(order_record_main_id=orderid).delete()
+    # order_record_main.objects.filter(user_list_id=user_list_id, order_status='shopping').delete()
     #return HttpResponseRedirect('showcart')
     return HttpResponse(2)
 
@@ -158,7 +158,7 @@ def submit_cart(request):
     print('order id is %s' % (orderid))
     # orderid=request.session.get('orderid')
     ##提交订单，要将相应的文具的库存数减去员工领用数
-    orders = order_record_slave.objects.filter(order_record_master_id=orderid)
+    orders = order_record_subordinate.objects.filter(order_record_main_id=orderid)
     for order in orders:
         stationery_id = order.stationery_id
         print('stationery id is %s' % (stationery_id))
@@ -170,7 +170,7 @@ def submit_cart(request):
         obj.save()
 
     # 提交订单位，将订单的状态改为submitted,
-    order_record_master.objects.filter(user_list_id=user_list_id, id=orderid).update(order_status='submitted',
+    order_record_main.objects.filter(user_list_id=user_list_id, id=orderid).update(order_status='submitted',
                                                                                      date=datetime.datetime.now().strftime(
                                                                                          "%Y-%m-%d"))
     request.session['orderid'] = None
@@ -180,7 +180,7 @@ def submit_cart(request):
 
 def complete_order(request):
     orderid = request.GET.get('orderid')
-    order_record_master.objects.filter(id=orderid).update(order_status='Completed')
+    order_record_main.objects.filter(id=orderid).update(order_status='Completed')
     return HttpResponseRedirect('orderlist')
 
 
@@ -200,18 +200,18 @@ def apply_login(request):
                 request.session['email_address'] = email_address
                 request.session['dept_name'] = user.dept_list.dept_name
 
-                order_record_masters = order_record_master.objects.filter(user_list_id=user.id, order_status='shopping')
-                if order_record_masters.exists():
-                    for order in order_record_masters:
+                order_record_mains = order_record_main.objects.filter(user_list_id=user.id, order_status='shopping')
+                if order_record_mains.exists():
+                    for order in order_record_mains:
                         request.session['orderid'] = order.id  # 如果有未提交的申请，取出ID号，传递给session
                         print('there is existing orderid in shopping statue ', order.id)
 
                 else:
                     # 如果没有查询到未提交的申请，就创建一条主记录
-                    order_record_master.objects.create(date=datetime.datetime.now().strftime("%Y-%m-%d"),
+                    order_record_main.objects.create(date=datetime.datetime.now().strftime("%Y-%m-%d"),
                                                        order_status='shopping', user_list_id=user.id)
                     print(user.id)
-                    orders = order_record_master.objects.filter(user_list_id=user.id, order_status='shopping')
+                    orders = order_record_main.objects.filter(user_list_id=user.id, order_status='shopping')
 
                     print(orders)
                     for order in orders:
@@ -234,17 +234,17 @@ def ajax(request):
     # print("get the stationery id is '%s'"%(id))
     # print("get order is is '%s'"%(orderid))
     # search if there is any same stationery_id on the shopping orderid
-    res = order_record_slave.objects.filter(order_record_master_id=orderid, stationery_id=id)
+    res = order_record_subordinate.objects.filter(order_record_main_id=orderid, stationery_id=id)
 
     if res.exists():
         # print("find same stationery '%s'" % (id))
         for stat in res:
             id = stat.id
             # print("stat id is '%s'"%(id))
-            obj = order_record_slave.objects.get(id=id)
+            obj = order_record_subordinate.objects.get(id=id)
             obj.order_num = obj.order_num + 1
             obj.save()
-            stats = order_record_slave.objects.filter(order_record_master_id=orderid).values('id', 'stationery__name',
+            stats = order_record_subordinate.objects.filter(order_record_main_id=orderid).values('id', 'stationery__name',
                                                                                              'order_num')
             ret = list(stats)
             result = json.dumps(ret)
@@ -252,9 +252,9 @@ def ajax(request):
             return HttpResponse(result, "application/json")
     else:
         # print("not found any same stationery")
-        order_record_slave.objects.create(order_num=1, order_record_master_id=orderid, stationery_id=id)
-        # stats=serializers.serialize('json',order_record_master.objects.filter(id=orderid))
-        stats = order_record_slave.objects.filter(order_record_master_id=orderid).values('id', 'stationery__name',
+        order_record_subordinate.objects.create(order_num=1, order_record_main_id=orderid, stationery_id=id)
+        # stats=serializers.serialize('json',order_record_main.objects.filter(id=orderid))
+        stats = order_record_subordinate.objects.filter(order_record_main_id=orderid).values('id', 'stationery__name',
                                                                                          'order_num')
         ret = list(stats)
         result = json.dumps(ret)
@@ -266,9 +266,9 @@ def ajax_layer_show_cart(request):
     # id=request.GET.get('id')
     orderid = request.session.get('orderid')
 
-    # order_record_slave.objects.create(order_num=1, order_record_master_id=orderid, stationery_id=id)
-    carts = order_record_slave.objects.filter(order_record_master_id=orderid)
-    # stats= order_record_slave.objects.filter(order_record_master_id=orderid).values('id','stationery__name', 'order_num')
+    # order_record_subordinate.objects.create(order_num=1, order_record_main_id=orderid, stationery_id=id)
+    carts = order_record_subordinate.objects.filter(order_record_main_id=orderid)
+    # stats= order_record_subordinate.objects.filter(order_record_main_id=orderid).values('id','stationery__name', 'order_num')
     # ret = list(stats)
     # ret = json.dumps(ret)
     # print(ret)
@@ -279,23 +279,23 @@ def ajax_layer_show_cart(request):
 def apply_index(request):
     user_list_id = request.session.get('user_list_id')
     orderid = request.session.get('orderid')
-    orders = order_record_master.objects.filter(user_list_id=user_list_id).exclude(order_status='shopping')
+    orders = order_record_main.objects.filter(user_list_id=user_list_id).exclude(order_status='shopping')
     return render(request, 'stationery/apply_index.html', {'orders': orders})
 
 
 @csrf_exempt
 def pur_index(request):
     stat_types = stat_type.objects.all()
-    #pur_historys = purchase_master.objects.filter(pur_status='submitted').order_by('-date')[:8]
-    purs = purchase_slave.objects.filter(entryid_id=request.session.get('entryid'))
+    #pur_historys = purchase_main.objects.filter(pur_status='submitted').order_by('-date')[:8]
+    purs = purchase_subordinate.objects.filter(entryid_id=request.session.get('entryid'))
     return render(request, 'stationery/purchase_index.html', locals())
 
 
 @csrf_exempt
 def pur_list(request):
 
-    pur_historys = purchase_master.objects.filter(pur_status='submitted').order_by('-date')[:10]
-    #purs = purchase_slave.objects.filter(entryid_id=request.session.get('entryid'))
+    pur_historys = purchase_main.objects.filter(pur_status='submitted').order_by('-date')[:10]
+    #purs = purchase_subordinate.objects.filter(entryid_id=request.session.get('entryid'))
     return render(request, 'stationery/purchase_list.html', locals())
 
 @csrf_exempt
@@ -316,20 +316,20 @@ def ajax_load_stationery(request):
 
 
 @csrf_exempt
-def update_pur_slave(request):
+def update_pur_subordinate(request):
     entryid = request.session.get('entryid')
     stationery_id = request.POST.get('id_stationery')
     pur_num = request.POST.get('pur_num')
     print('stationery id is "%s"' % (stationery_id))
     print('pur num is "%s"' % (pur_num))
-    purchase_slave.objects.create(entryid_id=entryid, num=pur_num, stationery_id=stationery_id)
+    purchase_subordinate.objects.create(entryid_id=entryid, num=pur_num, stationery_id=stationery_id)
     request.session['entryid']
     return HttpResponseRedirect('pur_index')
 
 
 def submit_pur(request):
     entryid = request.session.get('entryid')
-    res = purchase_slave.objects.filter(entryid_id=entryid)
+    res = purchase_subordinate.objects.filter(entryid_id=entryid)
     if res.exists():
         print("find  stationery with entryid '%s'" % (entryid))
         for purs in res:
@@ -338,34 +338,34 @@ def submit_pur(request):
             obj = stationery.objects.get(id=id)
             obj.stock_num = obj.stock_num + purs.num
             obj.save()
-    purchase_master.objects.filter(entryid=entryid).update(pur_status='submitted')
+    purchase_main.objects.filter(entryid=entryid).update(pur_status='submitted')
     del request.session['entryid']
     return HttpResponseRedirect('pur_index')
 
 
 @csrf_exempt
-def add_pur_master(request):
+def add_pur_main(request):
     if request.method == 'POST':
         entryid = request.POST.get('entryid')
         user_id = request.POST.get('user_id')
         stat_types = stat_type.objects.all()
-        pur_historys = purchase_master.objects.filter(pur_status='submitted').order_by('-date')[:8]
+        pur_historys = purchase_main.objects.filter(pur_status='submitted').order_by('-date')[:8]
         try:
-            pur_masters = purchase_master.objects.filter(entryid=entryid, pur_status='submitted')
-            pur_masters_entering = purchase_master.objects.filter(entryid=entryid, pur_status='entering')
-            if pur_masters.exists():
+            pur_mains = purchase_main.objects.filter(entryid=entryid, pur_status='submitted')
+            pur_mains_entering = purchase_main.objects.filter(entryid=entryid, pur_status='entering')
+            if pur_mains.exists():
                 msg = '** 无效的入库单编号“%s”，请重新输入！ **' % (entryid)
 
                 return render(request, 'stationery/purchase_index.html', locals())
 
-            elif pur_masters_entering.exists():
+            elif pur_mains_entering.exists():
                 request.session['entryid'] = entryid
                 msg = 'have a not submiting order'
 
                 return render(request, 'stationery/purchase_index.html', locals())
 
             else:
-                purchase_master.objects.create(date=datetime.datetime.now().strftime('%Y-%m-%d'), provider_id=1,
+                purchase_main.objects.create(date=datetime.datetime.now().strftime('%Y-%m-%d'), provider_id=1,
                                                user_id=user_id, entryid=entryid)
                 request.session['entryid'] = entryid
                 return render(request, 'stationery/purchase_index.html', locals())
@@ -399,11 +399,11 @@ def ajax_stat_increase(request):
     id = request.GET.get('id')
     orderid = request.GET.get('orderid')
     # 相应ID的文具数量加1，更新数据库
-    res = order_record_slave.objects.get(id=id)
+    res = order_record_subordinate.objects.get(id=id)
     res.order_num = res.order_num + 1
     res.save()
     ##将有相同订单号orderid 的所有文具列出来，以json格式反回给前端的ajax函数stat_increase
-    stats = order_record_slave.objects.filter(order_record_master_id=orderid).values('id', 'stationery__name',
+    stats = order_record_subordinate.objects.filter(order_record_main_id=orderid).values('id', 'stationery__name',
                                                                                      'order_num')
     ret = list(stats)
     result = json.dumps(ret)
@@ -414,13 +414,13 @@ def ajax_stat_increase(request):
 def ajax_stat_decrease(request):
     id = request.GET.get('id')
     orderid = request.GET.get('orderid')
-    res = order_record_slave.objects.get(id=id)
+    res = order_record_subordinate.objects.get(id=id)
     ## 如果申请领用的文具数量大于1，则减去1，
     if (res.order_num > 1):
         res.order_num = res.order_num - 1
         res.save()
         ##将有相同订单号orderid 的所有文具列出来，以json格式反回给前端的ajax函数stat_decrease
-        stats = order_record_slave.objects.filter(order_record_master_id=orderid).values('id', 'stationery__name',
+        stats = order_record_subordinate.objects.filter(order_record_main_id=orderid).values('id', 'stationery__name',
                                                                                          'order_num')
         ret = list(stats)
         result = json.dumps(ret)
@@ -431,10 +431,10 @@ def ajax_stat_decrease(request):
 def ajax_stat_remove(request):
     id = request.GET.get('id')
     orderid = request.GET.get('orderid')
-    order_record_slave.objects.filter(id=id).delete()
+    order_record_subordinate.objects.filter(id=id).delete()
 
     ##将有相同订单号orderid 的所有文具列出来，以json格式反回给前端的ajax函数stat_decrease
-    stats = order_record_slave.objects.filter(order_record_master_id=orderid).values('id', 'stationery__name',
+    stats = order_record_subordinate.objects.filter(order_record_main_id=orderid).values('id', 'stationery__name',
                                                                                      'order_num')
     ret = list(stats)
     result = json.dumps(ret)
@@ -444,6 +444,6 @@ def ajax_stat_remove(request):
 def purchase_details(request):
     entryid=request.GET.get('entryid')
     #request.session['entryid']=entryid
-    pur_masters=purchase_master.objects.filter(entryid=entryid)
-    pur_slaves=purchase_slave.objects.filter(entryid=entryid)
-    return render(request,'stationery/purchase_details.html',{'pur_masters':pur_masters,'pur_slaves':pur_slaves})
+    pur_mains=purchase_main.objects.filter(entryid=entryid)
+    pur_subordinates=purchase_subordinate.objects.filter(entryid=entryid)
+    return render(request,'stationery/purchase_details.html',{'pur_mains':pur_mains,'pur_subordinates':pur_subordinates})
